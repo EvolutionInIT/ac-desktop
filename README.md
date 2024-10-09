@@ -1,1 +1,1 @@
-fisrt commint
+fisrt commint, issue 1.2

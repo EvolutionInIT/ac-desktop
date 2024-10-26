@@ -1,0 +1,41 @@
+# Определяем компилятор и флаги
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall
+
+# Путь к Qt (замените на актуальные пути, если требуется)
+QT_PATH = /path/to/qt
+QT_INCLUDES = $(QT_PATH)/include
+QT_LIBS = $(QT_PATH)/lib
+
+# Указываем, что собираем с использованием модулей Widgets и Sql
+QT_MODULES = -lQt5Widgets -lQt5Sql
+
+# Исходные файлы и заголовки
+SOURCES = main.cpp mainwindow.cpp functions.cpp error.cpp first.cpp reg.cpp
+HEADERS = mainwindow.h functions.h error.h first.h reg.h
+UI_FILES = mainwindow.ui error.ui first.ui reg.ui
+
+# Список сгенерированных файлов для ui
+UIC_HEADERS = $(UI_FILES:.ui=.h)
+
+# Имя конечного исполняемого файла
+TARGET = Final
+
+# Правило для сборки основного исполняемого файла
+$(TARGET): $(SOURCES) $(HEADERS) $(UIC_HEADERS)
+	$(CXX) $(CXXFLAGS) -I$(QT_INCLUDES) $(SOURCES) $(QT_MODULES) -o $(TARGET)
+
+# Правило для сборки UI-файлов с помощью Qt
+%.h: %.ui
+	uic $< -o $@
+
+# Очистка
+clean:
+	rm -f $(TARGET) $(UIC_HEADERS)
+
+# Установка
+install:
+	install -m 0755 $(TARGET) /usr/local/bin
+
+# Правило для выполнения установки (укажите соответствующие пути, если требуется)
+.PHONY: clean install
